@@ -1,7 +1,11 @@
 require("frameClss.js");
+require("https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.36/Tone.js");
 var frames;
-var numberOfFrames;
+var numberOfFrames = 0;
 function create(){
+    if(numberOfFrames !== 0){
+        document.getElementById("innerContainer").innerHTML = '';
+    }
     numberOfFrames = parseInt(document.getElementById("fname").value);
     frames = [numberOfFrames];
     for(let i = 0; i < numberOfFrames; i++){
@@ -19,7 +23,26 @@ function create(){
 }
 
 function play(){
+    const synth = new Tone.Synth().toDestination();
+    var i = 0;                  //  set your counter to 1
+    myLoop();
+    function myLoop() {         //  create a loop function
+      setTimeout(function() {   //  call a 3s setTimeout when the loop is called
+        if(frames[i].button !== ""){
+            synth.triggerAttackRelease("C4", "8n");   //  your code here
+            document.getElementById("currentFrameInner").innerText = (i + 1)
+            i++;                    //  increment the counter
+        }
+        else{
+            document.getElementById("currentFrameInner").innerText = (i + 1)
+            i++;
+        }
 
+        if (i < numberOfFrames) {           //  if the counter < 10, call the loop function
+          myLoop();             //  ..  again which will trigger another 
+        }                       //  ..  setTimeout()
+      }, 1000/60)
+    }
 }   
 
 function save(){
